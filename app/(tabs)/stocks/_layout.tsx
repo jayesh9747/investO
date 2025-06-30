@@ -1,0 +1,36 @@
+import { Stack } from 'expo-router';
+
+export default function StocksLayout() {
+    return (
+        <Stack>
+            <Stack.Screen
+                name="index"
+                options={{
+                    title: 'Stocks',
+                    headerShown: true
+                }}
+            />
+            <Stack.Screen
+                name="explore"
+                options={{
+                    title: 'Explore',
+                    headerShown: true
+                }}
+            />
+            <Stack.Screen
+                name="product/[id]"
+                options={{
+                    title: 'Stock Details',
+                    headerShown: true
+                }}
+            />
+            <Stack.Screen
+                name="view-all/[section]"
+                options={{
+                    title: 'View All',
+                    headerShown: true
+                }}
+            />
+        </Stack>
+    );
+}
