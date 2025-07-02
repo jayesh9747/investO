@@ -2,7 +2,7 @@ import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // API Service
@@ -133,7 +133,13 @@ const StocksHomePage = () => {
     return (
         <SafeAreaView className="flex-1 bg-gray-50">
             <View className="px-4 py-4 bg-white shadow-sm flex-row items-center justify-between">
-                <Text className="text-2xl font-bold text-gray-900">Stocks App</Text>
+                <View className="flex-row items-center">
+                    <Image
+                        source={require('@/assets/images/icon.png')}
+                        className="w-36 h-14 mr-3"
+                        resizeMode="cover"
+                    />
+                </View>
                 <TouchableOpacity
                     className="mt-2 bg-gray-100 rounded-lg px-4 py-3"
                     onPress={navigateToSearch}
