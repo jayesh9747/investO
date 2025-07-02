@@ -51,7 +51,11 @@ Filtering and sorting by price, volume, market cap, and sector
 ## 📱 Screenshots
 
 
-## 🎥 Demo Videos
+## 🎥 Demo Video
+
+https://github.com/user-attachments/assets/a4003c41-762d-4729-b759-f8291ca6f562
+
+
 
 
 ## 🏃‍♂️ Running Locally with Expo Go
