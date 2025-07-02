@@ -48,6 +48,10 @@ Filtering and sorting by price, volume, market cap, and sector
 - **Storage**: AsyncStorage for local data persistence
 - **API**: Stock market data API integration
 
+## Application build link 
+
+https://drive.google.com/file/d/1ew8XdGlbbb-fMIFu38JQOq2uCtpu-9JW/view?usp=sharing
+
 ## 📱 Screenshots
 
 
