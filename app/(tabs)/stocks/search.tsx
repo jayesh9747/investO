@@ -23,7 +23,6 @@ interface StockMatch {
 
 const SearchPage: React.FC = () => {
     const router = useRouter();
-    const [selectedStock, setSelectedStock] = useState<StockMatch | null>(null);
     const [recentSearches, setRecentSearches] = useState<StockMatch[]>([]);
 
     const navigateToStock = (stock: StockMatch) => {
@@ -33,8 +32,6 @@ const SearchPage: React.FC = () => {
     };
 
     const handleStockSelect = (stock: StockMatch) => {
-        setSelectedStock(stock);
-
         // Add to recent searches (avoid duplicates)
         setRecentSearches(prev => {
             const filtered = prev.filter(item => item['1. symbol'] !== stock['1. symbol']);
@@ -46,7 +43,6 @@ const SearchPage: React.FC = () => {
     };
 
     const handleRecentStockPress = (stock: StockMatch) => {
-        setSelectedStock(stock);
         navigateToStock(stock);
     };
 
@@ -65,32 +61,6 @@ const SearchPage: React.FC = () => {
             </View>
 
             <ScrollView className="flex-1 px-4">
-                {selectedStock && (
-                    <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
-                        <Text className="text-lg font-semibold text-gray-800 mb-3">Selected Stock</Text>
-                        <View className="gap-2">
-                            <Text className="text-2xl font-bold text-blue-500">
-                                {selectedStock['1. symbol']}
-                            </Text>
-                            <Text className="text-lg text-gray-800 font-medium">
-                                {selectedStock['2. name']}
-                            </Text>
-                            <Text className="text-sm text-gray-600">
-                                {selectedStock['3. type']} • {selectedStock['4. region']}
-                            </Text>
-                            <Text className="text-sm text-gray-600">
-                                Currency: {selectedStock['8. currency']}
-                            </Text>
-                            <Text className="text-sm text-gray-600">
-                                Market Hours: {selectedStock['5. marketOpen']} - {selectedStock['6. marketClose']}
-                            </Text>
-                            <Text className="text-sm text-gray-600">
-                                Timezone: {selectedStock['7. timezone']}
-                            </Text>
-                        </View>
-                    </View>
-                )}
-
                 {recentSearches.length > 0 && (
                     <View className="mt-6 mb-4">
                         <Text className="text-xl font-semibold text-gray-800 mb-3">Recent Searches</Text>

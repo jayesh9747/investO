@@ -6,7 +6,7 @@ const apiKey = Constants.expoConfig?.extra?.apiKey;
 
 export const api = axios.create({
   baseURL: apiUrl,
-  // params: {
-  //   apikey: "demo",
-  // },
+  params: {
+    apikey: apiKey,
+  },
 });

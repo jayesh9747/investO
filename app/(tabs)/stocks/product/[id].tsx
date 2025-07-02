@@ -77,31 +77,55 @@ const EarningsChart: React.FC<EarningsChartProps> = ({ data, type }) => {
 
     const earnings = data.slice(0, 8);
     const maxEPS = Math.max(...earnings.map(item => Math.abs(parseFloat(item.reportedEPS))));
+    const chartHeight = 120; // Fixed chart height
 
     return (
         <View className="bg-gray-50 rounded-lg p-4 mb-3">
-            <View className="flex-row justify-around items-end h-40">
+            <View className="flex-row justify-around items-end" style={{ height: chartHeight + 40 }}>
                 {earnings.map((item, index) => {
                     const eps = parseFloat(item.reportedEPS);
                     const isPositive = eps >= 0;
-                    const barHeight = Math.abs(eps) / maxEPS * 120;
-                    const year = type === 'annual'
-                        ? item.fiscalDateEnding.split('-')[0]
-                        : item.fiscalDateEnding.split('-')[0] + 'Q' + Math.ceil(parseInt(item.fiscalDateEnding.split('-')[1]) / 3);
+                    // Ensure bar height doesn't exceed chart height and has minimum visibility
+                    const barHeight = Math.max(
+                        Math.min((Math.abs(eps) / maxEPS) * chartHeight, chartHeight),
+                        2 // Minimum height for visibility
+                    );
+
+                    // Fixed year calculation
+                    let year: string;
+                    if (type === 'annual') {
+                        year = item.fiscalDateEnding.split('-')[0];
+                    } else {
+                        const dateParts = item.fiscalDateEnding.split('-');
+                        const month = parseInt(dateParts[1]);
+                        const quarter = Math.ceil(month / 3);
+                        year = `${dateParts[0]}Q${quarter}`;
+                    }
 
                     return (
                         <View key={index} className="items-center flex-1 mx-0.5">
-                            <View className="h-30 w-5 justify-end items-center relative">
+                            {/* Bar container with proper height */}
+                            <View
+                                className="justify-end items-center"
+                                style={{ height: chartHeight, width: 18 }}
+                            >
                                 <View
                                     style={{
                                         height: barHeight,
-                                        alignSelf: isPositive ? 'flex-end' : 'flex-start',
+                                        width: 16,
+                                        backgroundColor: isPositive ? '#10b981' : '#ef4444', // green-500 : red-500
+                                        borderRadius: 2,
                                     }}
-                                    className={`w-4.5 rounded-sm min-h-1 ${isPositive ? 'bg-green-500' : 'bg-red-500'}`}
                                 />
                             </View>
-                            <Text className="text-xs text-gray-600 mt-1 text-center">{year}</Text>
-                            <Text className="text-xs text-black font-semibold mt-0.5 text-center">{eps.toFixed(2)}</Text>
+
+                            {/* Labels */}
+                            <Text className="text-xs text-gray-600 mt-1 text-center" style={{ fontSize: 10 }}>
+                                {year}
+                            </Text>
+                            <Text className="text-xs text-black font-semibold mt-0.5 text-center" style={{ fontSize: 10 }}>
+                                {eps.toFixed(2)}
+                            </Text>
                         </View>
                     );
                 })}
@@ -128,6 +152,7 @@ const fetchEarningsData = async (symbol: string): Promise<EarningsData> => {
             symbol: symbol,
         }
     });
+    console.log("this is data of the earnings", response.data)
     return response.data;
 };
 
