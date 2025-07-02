@@ -15,7 +15,11 @@
     },
     "extra": {
       "apiUrl": "https://www.alphavantage.co",
-      "apiKey": "797CTOAYKKSHXZSF"
+      "apiKey": "797CTOAYKKSHXZSF",
+      "router": {},
+      "eas": {
+        "projectId": "3c9cb862-0339-4fb0-a728-6afd10179e0b"
+      }
     },
     "android": {
       "package": "com.jayesh.investo",
