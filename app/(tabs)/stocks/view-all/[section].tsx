@@ -1,20 +1,24 @@
-// app/(tabs)/stocks/view-all/[section].tsx
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// API Service (same as home page)
 const fetchTopGainersLosers = async () => {
-  const response = await fetch('https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=demo');
-  if (!response.ok) {
+  try {
+    const response = await api.get('/query', {
+      params: {
+        function: 'TOP_GAINERS_LOSERS',
+      }
+    });
+
+    return response.data;
+  } catch (error) {
     throw new Error('Failed to fetch data');
   }
-  return response.json();
 };
 
-// Types (same as home page)
 interface StockItem {
   ticker: string;
   price: string;
@@ -53,35 +57,33 @@ const ViewAllPage = () => {
   };
 
   const renderStockItem = ({ item, index }: { item: StockItem; index: number }) => (
-    <TouchableOpacity 
-      style={styles.stockItem}
+    <TouchableOpacity
+      className="bg-white mx-4 mb-3 rounded-lg p-4 shadow-sm border border-gray-200 flex-row items-center"
       onPress={() => router.push(`/stocks/product/${item.ticker}`)}
     >
       {/* Stock Icon Placeholder */}
-      <View style={styles.stockIcon} />
-      
+      <View className="w-12 h-12 bg-gray-200 rounded-full mr-4" />
+
       {/* Stock Info */}
-      <View style={styles.stockInfo}>
-        <Text style={styles.stockTicker}>{item.ticker}</Text>
-        <Text style={styles.stockVolume}>
+      <View className="flex-1">
+        <Text className="font-semibold text-gray-900 text-base">{item.ticker}</Text>
+        <Text className="text-gray-500 text-sm mt-1">
           Vol: {parseInt(item.volume).toLocaleString()}
         </Text>
       </View>
 
       {/* Price Info */}
-      <View style={styles.priceInfo}>
-        <Text style={styles.stockPrice}>
+      <View className="items-end">
+        <Text className="font-semibold text-gray-900 text-base">
           ${parseFloat(item.price).toFixed(2)}
         </Text>
-        <Text 
-          style={[
-            styles.changePercentage,
-            section === 'gainers' ? styles.gainText : styles.lossText
-          ]}
+        <Text
+          className={`text-sm mt-1 font-medium ${section === 'gainers' ? 'text-green-600' : 'text-red-600'
+            }`}
         >
           {section === 'gainers' ? '+' : ''}{item.change_percentage}
         </Text>
-        <Text style={styles.changeAmount}>
+        <Text className="text-gray-500 text-xs mt-1">
           {section === 'gainers' ? '+' : ''}${parseFloat(item.change_amount).toFixed(2)}
         </Text>
       </View>
@@ -90,9 +92,9 @@ const ViewAllPage = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.centerContent}>
-          <Text style={styles.loadingText}>Loading {getTitle().toLowerCase()}...</Text>
+      <SafeAreaView className="flex-1 bg-gray-50">
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-lg text-gray-500">Loading {getTitle().toLowerCase()}...</Text>
         </View>
       </SafeAreaView>
     );
@@ -100,9 +102,9 @@ const ViewAllPage = () => {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={[styles.centerContent, styles.errorContainer]}>
-          <Text style={styles.errorText}>
+      <SafeAreaView className="flex-1 bg-gray-50">
+        <View className="flex-1 justify-center items-center px-4">
+          <Text className="text-lg text-red-600 text-center">
             Failed to load stocks data. Please try again.
           </Text>
         </View>
@@ -111,16 +113,16 @@ const ViewAllPage = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
+      <View className="px-4 py-4 bg-white shadow-sm flex-row items-center">
+        <TouchableOpacity
           onPress={() => router.back()}
-          style={styles.backButton}
+          className="mr-4 p-2 -ml-2"
         >
-          <Text style={styles.backButtonText}>←</Text>
+          <Text className="text-blue-600 text-lg">←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{getTitle()}</Text>
+        <Text className="text-xl font-bold text-gray-900">{getTitle()}</Text>
       </View>
 
       {/* Stocks List */}
@@ -129,11 +131,11 @@ const ViewAllPage = () => {
         renderItem={renderStockItem}
         keyExtractor={(item, index) => `${item.ticker}-${index}`}
         showsVerticalScrollIndicator={false}
-        style={styles.flatList}
-        contentContainerStyle={styles.flatListContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingTop: 16, paddingBottom: 20 }}
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
+          <View className="flex-1 justify-center items-center py-20">
+            <Text className="text-gray-500 text-center">
               No {getTitle().toLowerCase()} data available
             </Text>
           </View>
@@ -142,138 +144,5 @@ const ViewAllPage = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
-  centerContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#6b7280',
-  },
-  errorContainer: {
-    paddingHorizontal: 16,
-  },
-  errorText: {
-    fontSize: 18,
-    color: '#dc2626',
-    textAlign: 'center',
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backButton: {
-    marginRight: 16,
-    padding: 8,
-    marginLeft: -8,
-  },
-  backButtonText: {
-    color: '#2563eb',
-    fontSize: 18,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#111827',
-  },
-  flatList: {
-    flex: 1,
-  },
-  flatListContent: {
-    paddingTop: 16,
-    paddingBottom: 20,
-  },
-  stockItem: {
-    backgroundColor: 'white',
-    marginHorizontal: 16,
-    marginBottom: 12,
-    borderRadius: 8,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  stockIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#e5e7eb',
-    borderRadius: 24,
-    marginRight: 16,
-  },
-  stockInfo: {
-    flex: 1,
-  },
-  stockTicker: {
-    fontWeight: '600',
-    color: '#111827',
-    fontSize: 16,
-  },
-  stockVolume: {
-    color: '#6b7280',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  priceInfo: {
-    alignItems: 'flex-end',
-  },
-  stockPrice: {
-    fontWeight: '600',
-    color: '#111827',
-    fontSize: 16,
-  },
-  changePercentage: {
-    fontSize: 14,
-    marginTop: 4,
-    fontWeight: '500',
-  },
-  gainText: {
-    color: '#16a34a',
-  },
-  lossText: {
-    color: '#dc2626',
-  },
-  changeAmount: {
-    color: '#6b7280',
-    fontSize: 12,
-    marginTop: 4,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 80,
-  },
-  emptyText: {
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-});
 
 export default ViewAllPage;

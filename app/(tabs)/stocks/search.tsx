@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
     SafeAreaView,
     ScrollView,
-    StyleSheet,
     Text,
     TouchableOpacity,
     View,
@@ -52,12 +51,12 @@ const SearchPage: React.FC = () => {
     };
 
     return (
-        <SafeAreaView style={searchPageStyles.container}>
-            <View style={searchPageStyles.header}>
-                <Text style={searchPageStyles.title}>Search Stocks</Text>
+        <SafeAreaView className="flex-1 mt-5 bg-gray-50">
+            <View className="px-4 py-4 bg-white border-b border-gray-200">
+                <Text className="text-3xl font-bold text-gray-800">Search Stocks</Text>
             </View>
 
-            <View style={searchPageStyles.searchSection}>
+            <View className="px-4 py-4 bg-white border-b border-gray-200">
                 <SearchableStockInput
                     onStockSelect={handleStockSelect}
                     placeholder="Search for stocks, ETFs, mutual funds..."
@@ -65,27 +64,27 @@ const SearchPage: React.FC = () => {
                 />
             </View>
 
-            <ScrollView style={searchPageStyles.content}>
+            <ScrollView className="flex-1 px-4">
                 {selectedStock && (
-                    <View style={searchPageStyles.selectedStockCard}>
-                        <Text style={searchPageStyles.cardTitle}>Selected Stock</Text>
-                        <View style={searchPageStyles.stockDetails}>
-                            <Text style={searchPageStyles.stockSymbol}>
+                    <View className="bg-white rounded-xl p-4 mt-4 shadow-sm">
+                        <Text className="text-lg font-semibold text-gray-800 mb-3">Selected Stock</Text>
+                        <View className="gap-2">
+                            <Text className="text-2xl font-bold text-blue-500">
                                 {selectedStock['1. symbol']}
                             </Text>
-                            <Text style={searchPageStyles.stockName}>
+                            <Text className="text-lg text-gray-800 font-medium">
                                 {selectedStock['2. name']}
                             </Text>
-                            <Text style={searchPageStyles.stockInfo}>
+                            <Text className="text-sm text-gray-600">
                                 {selectedStock['3. type']} • {selectedStock['4. region']}
                             </Text>
-                            <Text style={searchPageStyles.stockInfo}>
+                            <Text className="text-sm text-gray-600">
                                 Currency: {selectedStock['8. currency']}
                             </Text>
-                            <Text style={searchPageStyles.stockInfo}>
+                            <Text className="text-sm text-gray-600">
                                 Market Hours: {selectedStock['5. marketOpen']} - {selectedStock['6. marketClose']}
                             </Text>
-                            <Text style={searchPageStyles.stockInfo}>
+                            <Text className="text-sm text-gray-600">
                                 Timezone: {selectedStock['7. timezone']}
                             </Text>
                         </View>
@@ -93,23 +92,23 @@ const SearchPage: React.FC = () => {
                 )}
 
                 {recentSearches.length > 0 && (
-                    <View style={searchPageStyles.recentSection}>
-                        <Text style={searchPageStyles.sectionTitle}>Recent Searches</Text>
+                    <View className="mt-6 mb-4">
+                        <Text className="text-xl font-semibold text-gray-800 mb-3">Recent Searches</Text>
                         {recentSearches.map((stock, index) => (
                             <TouchableOpacity
                                 key={`${stock['1. symbol']}-${index}`}
-                                style={searchPageStyles.recentItem}
+                                className="flex-row justify-between items-center bg-white p-3 rounded-lg mb-2 shadow-sm"
                                 onPress={() => handleRecentStockPress(stock)}
                             >
                                 <View>
-                                    <Text style={searchPageStyles.recentSymbol}>
+                                    <Text className="text-base font-bold text-gray-800">
                                         {stock['1. symbol']}
                                     </Text>
-                                    <Text style={searchPageStyles.recentName} numberOfLines={1}>
+                                    <Text className="text-sm text-gray-600 mt-0.5" numberOfLines={1}>
                                         {stock['2. name']}
                                     </Text>
                                 </View>
-                                <Text style={searchPageStyles.recentType}>
+                                <Text className="text-xs text-gray-400 font-medium">
                                     {stock['3. type']}
                                 </Text>
                             </TouchableOpacity>
@@ -120,115 +119,5 @@ const SearchPage: React.FC = () => {
         </SafeAreaView>
     );
 };
-
-const searchPageStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 20,
-        backgroundColor: '#f8f9fa',
-    },
-    header: {
-        paddingHorizontal: 16,
-        paddingVertical: 16,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    searchSection: {
-        paddingHorizontal: 16,
-        paddingVertical: 16,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-    },
-    content: {
-        flex: 1,
-        paddingHorizontal: 16,
-    },
-    selectedStockCard: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
-        marginTop: 16,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 12,
-    },
-    stockDetails: {
-        gap: 8,
-    },
-    stockSymbol: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#007AFF',
-    },
-    stockName: {
-        fontSize: 18,
-        color: '#333',
-        fontWeight: '500',
-    },
-    stockInfo: {
-        fontSize: 14,
-        color: '#666',
-    },
-    recentSection: {
-        marginTop: 24,
-        marginBottom: 16,
-    },
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 12,
-    },
-    recentItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 8,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    recentSymbol: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    recentName: {
-        fontSize: 14,
-        color: '#666',
-        marginTop: 2,
-    },
-    recentType: {
-        fontSize: 12,
-        color: '#999',
-        fontWeight: '500',
-    },
-});
 
 export default SearchPage;

@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  StyleSheet,
   Alert,
 } from 'react-native';
 import { useWatchlistStore, Watchlist } from '@/store/watchlistStore';
@@ -88,58 +87,59 @@ export const AddToWatchlistModal: React.FC<AddToWatchlistModalProps> = ({
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
-        <View style={styles.header}>
+      <View className="flex-1 bg-white">
+        {/* Header */}
+        <View className="flex-row justify-between items-center px-5 pt-4 pb-3 border-b border-gray-200">
           <TouchableOpacity onPress={handleClose}>
-            <Text style={styles.cancelButton}>Cancel</Text>
+            <Text className="text-base text-blue-600">Cancel</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Add to Watchlist</Text>
-          <View style={styles.headerRight} />
+          <Text className="text-lg font-semibold text-black">Add to Watchlist</Text>
+          <View className="w-12" />
         </View>
 
-        <View style={styles.stockInfo}>
-          <Text style={styles.stockSymbol}>{stock.symbol}</Text>
-          <Text style={styles.stockName}>{stock.name}</Text>
+        {/* Stock Info */}
+        <View className="px-5 py-4 bg-gray-50 border-b border-gray-200">
+          <Text className="text-lg font-bold text-black mb-1">{stock.symbol}</Text>
+          <Text className="text-sm text-gray-600">{stock.name}</Text>
         </View>
 
-        <ScrollView style={styles.content}>
+        {/* Content */}
+        <ScrollView className="flex-1">
           {/* Create New Watchlist Section */}
-          <View style={styles.section}>
+          <View className="px-5 py-4">
             <TouchableOpacity
-              style={styles.createButton}
+              className="bg-blue-600 rounded-lg py-3 px-4 items-center"
               onPress={() => setShowCreateNew(!showCreateNew)}
             >
-              <Text style={styles.createButtonText}>+ Create New Watchlist</Text>
+              <Text className="text-base font-semibold text-white">+ Create New Watchlist</Text>
             </TouchableOpacity>
 
             {showCreateNew && (
-              <View style={styles.createForm}>
+              <View className="mt-4 bg-gray-50 rounded-lg p-4">
                 <TextInput
-                  style={styles.input}
+                  className="bg-white rounded-lg px-3 py-2.5 text-base border border-gray-300 mb-3"
                   placeholder="Enter watchlist name"
                   value={newWatchlistName}
                   onChangeText={setNewWatchlistName}
                   autoFocus
                 />
-                <View style={styles.createActions}>
+                <View className="flex-row justify-end gap-3">
                   <TouchableOpacity
-                    style={styles.cancelCreateButton}
+                    className="py-2 px-4"
                     onPress={() => {
                       setShowCreateNew(false);
                       setNewWatchlistName('');
                     }}
                   >
-                    <Text style={styles.cancelCreateText}>Cancel</Text>
+                    <Text className="text-base text-gray-600">Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={[
-                      styles.confirmCreateButton,
-                      !newWatchlistName.trim() && styles.disabledButton,
-                    ]}
+                    className={`rounded-md py-2 px-4 ${newWatchlistName.trim() ? 'bg-blue-600' : 'bg-gray-400'
+                      }`}
                     onPress={handleCreateWatchlist}
                     disabled={!newWatchlistName.trim()}
                   >
-                    <Text style={styles.confirmCreateText}>Create & Add</Text>
+                    <Text className="text-base font-semibold text-white">Create & Add</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -148,8 +148,8 @@ export const AddToWatchlistModal: React.FC<AddToWatchlistModalProps> = ({
 
           {/* Existing Watchlists */}
           {watchlists.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Select Existing Watchlists</Text>
+            <View className="px-5 py-4">
+              <Text className="text-base font-semibold text-black mb-3">Select Existing Watchlists</Text>
               {watchlists.map((watchlist) => {
                 const isAlreadyInWatchlist = stockWatchlistIds.includes(watchlist.id);
                 const isSelected = selectedWatchlistIds.includes(watchlist.id);
@@ -157,37 +157,34 @@ export const AddToWatchlistModal: React.FC<AddToWatchlistModalProps> = ({
                 return (
                   <TouchableOpacity
                     key={watchlist.id}
-                    style={[
-                      styles.watchlistItem,
-                      isSelected && styles.selectedWatchlistItem,
-                      isAlreadyInWatchlist && styles.disabledWatchlistItem,
-                    ]}
+                    className={`flex-row justify-between items-center py-3 px-4 rounded-lg mb-2 ${isSelected
+                        ? 'bg-blue-50 border-2 border-blue-600'
+                        : isAlreadyInWatchlist
+                          ? 'bg-gray-100 opacity-60'
+                          : 'bg-gray-50'
+                      }`}
                     onPress={() => !isAlreadyInWatchlist && handleToggleWatchlist(watchlist.id)}
                     disabled={isAlreadyInWatchlist}
                   >
-                    <View style={styles.watchlistInfo}>
-                      <Text style={[
-                        styles.watchlistName,
-                        isAlreadyInWatchlist && styles.disabledText,
-                      ]}>
+                    <View className="flex-1">
+                      <Text className={`text-base font-semibold mb-0.5 ${isAlreadyInWatchlist ? 'text-gray-500' : 'text-black'
+                        }`}>
                         {watchlist.name}
                       </Text>
-                      <Text style={[
-                        styles.watchlistCount,
-                        isAlreadyInWatchlist && styles.disabledText,
-                      ]}>
+                      <Text className={`text-sm ${isAlreadyInWatchlist ? 'text-gray-500' : 'text-gray-600'
+                        }`}>
                         {watchlist.items.length} stocks
                       </Text>
                     </View>
-                    <View style={styles.checkContainer}>
+                    <View className="ml-3">
                       {isAlreadyInWatchlist ? (
-                        <Text style={styles.alreadyAddedText}>✓ Added</Text>
+                        <Text className="text-sm text-green-600 font-semibold">✓ Added</Text>
                       ) : (
-                        <View style={[
-                          styles.checkbox,
-                          isSelected && styles.checkedBox,
-                        ]}>
-                          {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                        <View className={`w-6 h-6 rounded-full border-2 items-center justify-center ${isSelected
+                            ? 'bg-blue-600 border-blue-600'
+                            : 'border-gray-400'
+                          }`}>
+                          {isSelected && <Text className="text-white text-sm font-bold">✓</Text>}
                         </View>
                       )}
                     </View>
@@ -197,21 +194,23 @@ export const AddToWatchlistModal: React.FC<AddToWatchlistModalProps> = ({
             </View>
           )}
 
+          {/* Empty State */}
           {watchlists.length === 0 && !showCreateNew && (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>No watchlists yet</Text>
-              <Text style={styles.emptyStateSubtext}>Create your first watchlist to get started</Text>
+            <View className="items-center py-10">
+              <Text className="text-lg font-semibold text-gray-600 mb-2">No watchlists yet</Text>
+              <Text className="text-sm text-gray-500 text-center">Create your first watchlist to get started</Text>
             </View>
           )}
         </ScrollView>
 
+        {/* Footer */}
         {selectedWatchlistIds.length > 0 && (
-          <View style={styles.footer}>
+          <View className="px-5 py-4 border-t border-gray-200 bg-white">
             <TouchableOpacity
-              style={styles.addButton}
+              className="bg-blue-600 rounded-lg py-3.5 items-center"
               onPress={handleAddToSelected}
             >
-              <Text style={styles.addButtonText}>
+              <Text className="text-base font-semibold text-white">
                 Add to {selectedWatchlistIds.length} Watchlist{selectedWatchlistIds.length > 1 ? 's' : ''}
               </Text>
             </TouchableOpacity>
@@ -221,211 +220,3 @@ export const AddToWatchlistModal: React.FC<AddToWatchlistModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  cancelButton: {
-    fontSize: 16,
-    color: '#007AFF',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000000',
-  },
-  headerRight: {
-    width: 50,
-  },
-  stockInfo: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#f8f9fa',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  stockSymbol: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#000000',
-    marginBottom: 4,
-  },
-  stockName: {
-    fontSize: 14,
-    color: '#666666',
-  },
-  content: {
-    flex: 1,
-  },
-  section: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  createButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  createButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-  createForm: {
-    marginTop: 16,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    padding: 16,
-  },
-  input: {
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    marginBottom: 12,
-  },
-  createActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 12,
-  },
-  cancelCreateButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  cancelCreateText: {
-    fontSize: 16,
-    color: '#666666',
-  },
-  confirmCreateButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  confirmCreateText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-  disabledButton: {
-    backgroundColor: '#cccccc',
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 12,
-  },
-  watchlistItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  selectedWatchlistItem: {
-    backgroundColor: '#e3f2fd',
-    borderWidth: 2,
-    borderColor: '#007AFF',
-  },
-  disabledWatchlistItem: {
-    backgroundColor: '#f0f0f0',
-    opacity: 0.6,
-  },
-  watchlistInfo: {
-    flex: 1,
-  },
-  watchlistName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 2,
-  },
-  watchlistCount: {
-    fontSize: 14,
-    color: '#666666',
-  },
-  disabledText: {
-    color: '#999999',
-  },
-  checkContainer: {
-    marginLeft: 12,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#cccccc',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkedBox: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
-  checkmark: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  alreadyAddedText: {
-    fontSize: 14,
-    color: '#34C759',
-    fontWeight: '600',
-  },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  emptyStateText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#666666',
-    marginBottom: 8,
-  },
-  emptyStateSubtext: {
-    fontSize: 14,
-    color: '#999999',
-    textAlign: 'center',
-  },
-  footer: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-    backgroundColor: '#ffffff',
-  },
-  addButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-});

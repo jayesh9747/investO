@@ -1,19 +1,17 @@
-// SearchableStockInput.tsx
-import Constants from 'expo-constants';
-import React, { useState, useEffect, useCallback } from 'react';
+import { api } from "@/lib/api";
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  View,
-  TextInput,
-  Text,
-  FlatList,
-  TouchableOpacity,
   ActivityIndicator,
-  StyleSheet,
-  ViewStyle,
+  FlatList,
+  Text,
+  TextInput,
   TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-// Types for API response
+
 interface StockMatch {
   '1. symbol': string;
   '2. name': string;
@@ -38,8 +36,6 @@ interface SearchableStockInputProps {
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
 }
-
-const apiKey = Constants.expoConfig?.extra?.apiKey;
 
 const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
   onStockSelect,
@@ -68,9 +64,14 @@ const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
       setError(null);
 
       try {
-        const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${encodeURIComponent(searchQuery)}&apikey=${apiKey}`;
-        const response = await fetch(url);
-        const data: ApiResponse = await response.json();
+        const response = await api.get('/query', {
+          params: {
+            function: 'SYMBOL_SEARCH',
+            keywords: searchQuery,
+          }
+        });
+
+        const data: ApiResponse = response.data;
 
         if (data.bestMatches && data.bestMatches.length > 0) {
           const limitedResults = data.bestMatches.slice(0, maxResults);
@@ -88,7 +89,7 @@ const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
         setLoading(false);
       }
     }, debounceMs),
-    [debounceMs, maxResults, apiKey]
+    [debounceMs, maxResults]
   );
 
   // Trigger search when query changes
@@ -104,24 +105,26 @@ const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
 
   const renderStockItem = ({ item }: { item: StockMatch }) => {
     const matchPercentage = (parseFloat(item['9. matchScore']) * 100).toFixed(0);
-    
+
     return (
       <TouchableOpacity
-        style={styles.resultItem}
+        className="p-4 border-b border-gray-100 bg-white"
         onPress={() => handleStockSelect(item)}
       >
-        <View style={styles.stockInfo}>
-          <View style={styles.symbolRow}>
-            <Text style={styles.stockSymbol}>{item['1. symbol']}</Text>
-            <Text style={styles.matchScore}>{matchPercentage}%</Text>
+        <View className="flex-1">
+          <View className="flex-row justify-between items-center mb-1">
+            <Text className="text-base font-bold text-blue-600">{item['1. symbol']}</Text>
+            <Text className="text-xs text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded-full">
+              {matchPercentage}%
+            </Text>
           </View>
-          <Text style={styles.stockName} numberOfLines={2}>
+          <Text className="text-sm text-gray-800 mb-1.5 font-medium" numberOfLines={2}>
             {item['2. name']}
           </Text>
-          <Text style={styles.stockDetails}>
+          <Text className="text-xs text-gray-600 mb-1">
             {item['3. type']} • {item['4. region']} • {item['8. currency']}
           </Text>
-          <Text style={styles.marketHours}>
+          <Text className="text-xs text-gray-500 italic">
             Market: {item['5. marketOpen']} - {item['6. marketClose']} ({item['7. timezone']})
           </Text>
         </View>
@@ -130,10 +133,11 @@ const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
   };
 
   return (
-    <View style={[styles.container, containerStyle]}>
-      <View style={styles.inputContainer}>
+    <View className={`relative z-50 ${containerStyle ? '' : ''}`} style={containerStyle}>
+      <View className="flex-row items-center bg-gray-100 rounded-lg px-3 h-11 border border-gray-300">
         <TextInput
-          style={[styles.input, inputStyle]}
+          className={`flex-1 text-base text-gray-800 py-0 ${inputStyle ? '' : ''}`}
+          style={inputStyle}
           value={query}
           onChangeText={setQuery}
           placeholder={placeholder}
@@ -143,20 +147,20 @@ const SearchableStockInput: React.FC<SearchableStockInputProps> = ({
           }}
         />
         {loading && (
-          <ActivityIndicator style={styles.loadingIndicator} size="small" color="#007AFF" />
+          <ActivityIndicator className="ml-2" size="small" color="#007AFF" />
         )}
       </View>
 
       {showResults && (
-        <View style={styles.resultsContainer}>
+        <View className="absolute top-full left-0 right-0 bg-white rounded-lg border border-gray-300 border-t-0 max-h-80 shadow-lg">
           {error ? (
-            <Text style={styles.errorText}>{error}</Text>
+            <Text className="p-3 text-red-500 text-center text-sm">{error}</Text>
           ) : (
             <FlatList
               data={results}
               renderItem={renderStockItem}
               keyExtractor={(item) => item['1. symbol']}
-              style={styles.resultsList}
+              className="max-h-80"
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             />
@@ -178,105 +182,5 @@ function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(() => func(...args), wait);
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    zIndex: 1000,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-    paddingVertical: 0,
-  },
-  loadingIndicator: {
-    marginLeft: 8,
-  },
-  resultsContainer: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderTopWidth: 0,
-    maxHeight: 300,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  resultsList: {
-    maxHeight: 300,
-  },
-  resultItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    backgroundColor: '#fff',
-  },
-  stockInfo: {
-    flex: 1,
-  },
-  symbolRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  stockSymbol: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#007AFF',
-  },
-  stockName: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 6,
-    fontWeight: '500',
-  },
-  stockDetails: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-  },
-  marketHours: {
-    fontSize: 11,
-    color: '#999',
-    fontStyle: 'italic',
-  },
-  matchScore: {
-    fontSize: 11,
-    color: '#007AFF',
-    fontWeight: '600',
-    backgroundColor: '#f0f8ff',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  errorText: {
-    padding: 12,
-    color: '#ff6b6b',
-    textAlign: 'center',
-    fontSize: 14,
-  },
-});
 
 export default SearchableStockInput;
