@@ -7,7 +7,7 @@ export default function WatchlistLayout() {
                 name="index"
                 options={{
                     title: 'Watchlist',
-                    headerShown: true
+                    headerShown: false
                 }}
             />
         </Stack>

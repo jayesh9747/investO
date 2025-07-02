@@ -7,14 +7,14 @@ export default function StocksLayout() {
                 name="index"
                 options={{
                     title: 'Stocks',
-                    headerShown: true
+                    headerShown: false
                 }}
             />
             <Stack.Screen
-                name="explore"
+                name="search"
                 options={{
-                    title: 'Explore',
-                    headerShown: true
+                    title: 'search',
+                    headerShown: false
                 }}
             />
             <Stack.Screen
@@ -28,7 +28,7 @@ export default function StocksLayout() {
                 name="view-all/[section]"
                 options={{
                     title: 'View All',
-                    headerShown: true
+                    headerShown: false
                 }}
             />
         </Stack>
