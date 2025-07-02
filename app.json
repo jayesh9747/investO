@@ -11,6 +11,10 @@
     "ios": {
       "supportsTablet": true
     },
+    "extra": {
+      "apiUrl": "https://www.alphavantage.co",
+      "apiKey": "797CTOAYKKSHXZSF"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

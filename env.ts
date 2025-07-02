@@ -1,0 +1,1 @@
+export const STOCK_API_KEY= process.env.STOCK_API_KEY 
