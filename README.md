@@ -1,50 +1,120 @@
-# Welcome to your Expo app 👋
+# InvestO 📈
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, feature-rich investment tracking application built with React Native and Expo, designed to provide users with real-time stock market data, watchlist management, and comprehensive stock analysis tools.
 
-## Get started
+## 🚀 Features
 
-1. Install dependencies
+### Core Navigation
+- **Stocks Tab**: Main dashboard with market overview and quick access to stock information
+- **Watchlist Tab**: Personalized stock tracking and portfolio management
 
+### Key Screens
+
+🔍 Explore Screen
+
+Top Gainers and Losers sections with grid cards
+Cards display stock symbol, price, change percentage with color indicators
+Quick add-to-watchlist functionality
+
+👁️ Watchlist Screen
+
+Multiple custom watchlists with empty state support
+Add, edit, delete watchlists with stock summary cards
+
+📊 Product/Stock Details Screen
+
+Real-time stock data with company metrics (market cap, P/E ratio)
+Interactive price chart with multiple timeframes (1D-1Y)
+Dynamic watchlist add/remove with status indicators
+
+➕ Add to Watchlist Popup
+
+Create new or select existing watchlists
+Batch operations with smart name suggestions
+
+📋 View All Screen
+
+Complete stock lists with advanced pagination
+Filtering and sorting by price, volume, market cap, and sector
+
+## 🛠️ Technology Stack
+
+- **Framework**: React Native with Expo
+- **State Management**: Zustud State management
+- **Navigation**: Expo router
+- **Charts**: React Native Chart Kit 
+- **UI Components**: React Native Elements
+- **Icons**: React Native Vector Icons
+- **Storage**: AsyncStorage for local data persistence
+- **API**: Stock market data API integration
+
+## 📱 Screenshots
+
+
+## 🎥 Demo Videos
+
+
+## 🏃‍♂️ Running Locally with Expo Go
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn package manager
+- Expo CLI installed globally
+- Expo Go app on your mobile device
+
+### Installation Steps
+
+1. **Clone the Repository**
    ```bash
-   npm install
+   git clone https://github.com/yourusername/investo-app.git
+   cd investo-app
    ```
 
-2. Start the app
+2. **Install Dependencies**
+   ```bash
+   # Using npm
+   npm install
 
+   # Or using yarn
+   yarn install
+   ```
+
+3. **Install Expo CLI (if not already installed)**
+   ```bash
+   npm install -g @expo/cli
+   ```
+
+4. **Set Up Environment Variables**
+   ```bash
+   # Create .env file in root directory
+   cp .env.example .env
+   
+   # Add your API keys and configuration
+   STOCK_API_KEY=your_stock_api_key_here
+   STOCK_API_BASE_URL=https://api.stockservice.com
+   ```
+
+5. **Start the Development Server**
    ```bash
    npx expo start
+   
+   # Or with specific options
+   npx expo start --clear  # Clear cache
+   npx expo start --tunnel # Use tunnel for external access
    ```
 
-In the output, you'll find options to open the app in a
+### Running on Your Device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+1. **Download Expo Go**
+   - iOS: [App Store](https://apps.apple.com/app/expo-go/id982107779)
+   - Android: [Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+2. **Connect to Development Server**
+   - **iOS**: Open Camera app and scan the QR code from terminal
+   - **Android**: Open Expo Go app and scan the QR code
+   - **Alternative**: Enter the URL manually in Expo Go
 
-## Get a fresh project
+3. **Network Requirements**
+   - Ensure your mobile device and computer are on the same Wi-Fi network
+   - If experiencing connection issues, use tunnel mode: `npx expo start --tunnel`
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
