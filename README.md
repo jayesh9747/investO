@@ -58,14 +58,12 @@ https://drive.google.com/file/d/1ew8XdGlbbb-fMIFu38JQOq2uCtpu-9JW/view?usp=shari
   <img src="https://github.com/user-attachments/assets/8f3cea79-61f2-4acb-a2b5-3a8f72baef23" width="180" alt="Image 2">
   <img src="https://github.com/user-attachments/assets/aecf7ffa-116f-4d4f-bb8c-c3fdc8cc0364" width="180" alt="Image 3">
   <img src="https://github.com/user-attachments/assets/e1bddcc9-4dd9-4af3-ad2a-51ba034bd261" width="180" alt="Image 4">
-  <img src="https://github.com/user-attachments/assets/ba8a9dfe-8cf8-4513-8b58-68ccd409f1f8" width="180" alt="Image 5">
 </div>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/bc598244-12cc-4df3-a343-2ee1d96733b5" width="180" alt="Image 6">
   <img src="https://github.com/user-attachments/assets/ffe0d209-0454-4d37-a431-8aebf063f484" width="180" alt="Image 7">
   <img src="https://github.com/user-attachments/assets/8bf5e1c5-afab-49dc-93cc-993ee7aa7eee" width="180" alt="Image 8">
   <img src="https://github.com/user-attachments/assets/42458e1d-d01a-44e6-bb88-33a3bde03dc8" width="180" alt="Image 9">
-  <img src="https://github.com/user-attachments/assets/1fd50857-54c6-4102-b34e-5f7c3fae9b51" width="180" alt="Image 10">
 </div>
 
 ## 🎥 Demo Video
